@@ -40,6 +40,19 @@ public class ProductController : ControllerBase
 
     }
 
+    [HttpPut("{id}")]
+    [Authorize]
+    public async Task<IActionResult> Edit(Guid id, [FromBody] EditProductRequest request)
+    {
+        var product = await _productService.EditProduct(id, request.productName);
+
+        if (product == null)
+            return NotFound("Produto não encontrado.");
+
+        return Ok(product);
+
+    }
+
     [HttpDelete]
     [Authorize]
     public async Task<IActionResult> Delete(Guid id)

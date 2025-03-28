@@ -13,7 +13,7 @@ public class ProductService
 
     public async Task<Product?> GetProductById(Guid id) => await _context.Products.FindAsync(id);
 
-    public async Task AddProduct (Product product)
+    public async Task AddProduct(Product product)
     {
         _context.Add(product);
 
@@ -21,21 +21,38 @@ public class ProductService
 
     }
 
+    public async Task<Product?> EditProduct(Guid id, string productName)
+    {
+        var product = await _context.Products.FindAsync(id);
+
+        if (product == null) return null;
+
+
+        product.ProductName = productName;
+
+        _context.Update(product);
+
+        await _context.SaveChangesAsync();
+
+        return product;
+
+    }
+
     public async Task<bool> DeleteProduct(Guid id)
     {
         var product = await _context.Products.FindAsync(id);
 
-        if(product==null) return false;
+        if (product == null) return false;
 
         _context.Remove(product);
 
         await _context.SaveChangesAsync();
 
         return true;
-        
+
     }
 
-    
 
-    
+
+
 }
