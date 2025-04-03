@@ -75,7 +75,9 @@ Authorization: Bearer <seu-token-jwt>
 - `GET /api/v{versio}/Product` - Listar produtos
 - `GET /api/v{versio}/Product{id}` - Obter detalhes de um produto
 - `POST /api/v{versio}/Product` - Criar um novo produto
-- `PUT /api/v{versio}/Product/{id}` - Atualizar um produto
+- `PUT /api/v{versio}/Product/Edit/{id}` - Atualizar um produto
+- `PUT /api/v{versio}/Product/Increase/{id}` - adicionar quantidades ao produto
+- `PUT /api/v{versio}/Product/Decrease/{id}` -  remover quantidades de um produto
 - `DELETE /api/v{versio}/Product{id}` - Remover um produto
 
 ## Contribuição
