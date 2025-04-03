@@ -1,0 +1,1 @@
+public record UpdateProductRequest(int value);

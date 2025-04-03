@@ -34,13 +34,13 @@ public class ProductController : ControllerBase
     [Authorize]
     public async Task<IActionResult> Create(Product product)
     {
-        await _productService.AddProduct(product);
+        await _productService.CreateProduct(product);
 
         return CreatedAtAction(nameof(GetProductById), new { id = product.ProductId }, product);
 
     }
 
-    [HttpPut("{id}")]
+    [HttpPut("Edit/{id}")]
     [Authorize]
     public async Task<IActionResult> Edit(Guid id, [FromBody] EditProductRequest request)
     {
@@ -51,6 +51,37 @@ public class ProductController : ControllerBase
 
         return Ok(product);
 
+    }
+
+    [HttpPut("Increase/{id}")]
+    [Authorize]
+
+    public async Task<IActionResult> IncreaseProduct(Guid id, [FromBody] UpdateProductRequest request)
+    {
+        var product = await _productService.IncreaseProduct(id, request.value);
+
+        if (product == null)
+            return NotFound("Produto não encontrado.");
+
+        return Ok($" {product.ProductName} alterado com sucesso!");
+    }
+
+    [HttpPut("Decrease/{id}")]
+    [Authorize]
+
+    public async Task<IActionResult> DecreaseProduct(Guid id, [FromBody] UpdateProductRequest request)
+    {
+        var product = await _productService.GetProductById(id);
+
+        if (product == null)
+            return NotFound("Produto não encontrado.");
+
+        if (product.ProductQuantity < request.value)
+            return BadRequest("Quantidade maior que estoque do produto!");
+
+        await _productService.DecreaseProduct(id, request.value);
+
+        return Ok($" {product.ProductName} alterado com sucesso!");
     }
 
     [HttpDelete]

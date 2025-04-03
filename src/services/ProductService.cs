@@ -13,11 +13,50 @@ public class ProductService
 
     public async Task<Product?> GetProductById(Guid id) => await _context.Products.FindAsync(id);
 
-    public async Task AddProduct(Product product)
+    public async Task CreateProduct(Product product)
     {
         _context.Add(product);
 
         await _context.SaveChangesAsync();
+
+    }
+
+    public async Task<Product?> IncreaseProduct(Guid productId, int value)
+    {
+        var product = await _context.Products.FindAsync(productId);
+
+        if (product == null) return null;
+
+        product.ProductQuantity += value;
+
+        _context.Products.Update(product);
+
+        await _context.SaveChangesAsync();
+
+        return product;
+
+    }
+
+    public async Task<Product?> DecreaseProduct(Guid productId, int value)
+    {
+        var product = await _context.Products.FindAsync(productId);
+
+        if (product == null) return null;
+
+        if (product.ProductQuantity > 0 && product.ProductQuantity >= value)
+        {
+            product.ProductQuantity -= value;
+
+            _context.Products.Update(product);
+
+            await _context.SaveChangesAsync();
+
+            return product;
+        }
+
+        return null;
+
+
 
     }
 

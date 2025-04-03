@@ -51,6 +51,20 @@ public class UserService
 
     }
 
+    public async Task<UserDto?> UpdateUserName(Guid id, string email)
+    {
+        var user = await _context.Users.FindAsync(id);
+
+        if (user == null) return null;
+
+        user.UserEmail = email;
+
+        await _context.SaveChangesAsync();
+
+        return new UserDto(user.UserName, user.UserEmail);
+
+    }
+
     public async Task<bool> DeleteUser(Guid id)
     {
         var user = await _context.Users.FindAsync(id);
