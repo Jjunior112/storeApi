@@ -49,7 +49,7 @@ dotnet ef database update
 dotnet run
 ```
 
-A API estará disponível em `http://localhost:5000` ou `https://localhost:5001`.
+A API estará disponível  no link que será mostrado no console algo como: `https://localhost:5001`.
 
 ## Autenticação JWT
 
@@ -68,17 +68,51 @@ Authorization: Bearer <seu-token-jwt>
 ### Autenticação
 
 - `POST /api/v{version}/User/signup` - Registro de usuários
+  
+  ```JSON
+    {
+      "username": "username",
+    
+      "email": "email@email.com",
+
+      "password" : "senhaForte!"
+    }
+  ```
 - `POST /api/v{version}/User/signin` - Autenticação e obtenção do token JWT
+  
+    ```JSON
+    { 
+      "email": "email@email.com",
+
+      "password" : "senhaForte!"
+    }
+  ```
 
 ### Produtos
 
-- `GET /api/v{versio}/Product` - Listar produtos
-- `GET /api/v{versio}/Product{id}` - Obter detalhes de um produto
-- `POST /api/v{versio}/Product` - Criar um novo produto
-- `PUT /api/v{versio}/Product/Edit/{id}` - Atualizar um produto
-- `PUT /api/v{versio}/Product/Increase/{id}` - adicionar quantidades ao produto
-- `PUT /api/v{versio}/Product/Decrease/{id}` -  remover quantidades de um produto
-- `DELETE /api/v{versio}/Product{id}` - Remover um produto
+- `GET /api/v{version}/Product` - Listar produtos
+- `GET /api/v{version}/Product{id}` - Obter detalhes de um produto
+- `POST /api/v{version}/Product` - Criar um novo produto
+- `PUT /api/v{version}/Product/Edit/{id}` - Atualizar um produto
+  
+    ```JSON
+    {
+      "productName": "novo nome"
+    }
+  ```
+- `PUT /api/v{version}/Product/Increase/{id}` - adicionar quantidades ao produto
+    ```JSON
+    {
+      "value": 10
+    }
+  ```
+- `PUT /api/v{version}/Product/Decrease/{id}` -  remover quantidades de um produto
+  ```JSON
+    {
+      "value": 10
+    }
+  ```
+- `DELETE /api/v{version}/Product/{id}` - Remover um produto
 
 ## Contribuição
 
