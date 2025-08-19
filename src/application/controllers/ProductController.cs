@@ -42,9 +42,9 @@ public class ProductController : ControllerBase
 
     [HttpPut("Edit/{id}")]
     [Authorize]
-    public async Task<IActionResult> Edit(Guid id, [FromBody] EditProductRequest request)
+    public async Task<IActionResult> Edit(Guid id, [FromBody] EditProductDto dto)
     {
-        var product = await _productService.EditProduct(id, request.productName);
+        var product = await _productService.EditProduct(id, dto.productName);
 
         if (product == null)
             return NotFound("Produto não encontrado.");

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using storeApp.domain.dtos;
 
 
 [ApiVersion("1.0")]
@@ -32,7 +33,7 @@ public class UserController : ControllerBase
 
     [HttpPost("signup")]
 
-    public async Task<IActionResult> UserSignup(User user)
+    public async Task<IActionResult> UserSignup(RegisterDto user)
     {
 
         await _userService.AddUser(user);
@@ -42,18 +43,18 @@ public class UserController : ControllerBase
 
     [HttpPost("signin")]
 
-    public async Task<AuthResponse> UserSignin(Login request, IConfiguration config)
+    public async Task<AuthResponseDto> UserSignin(LoginDto request, IConfiguration config)
     {
 
         var token = await _userService.UserLogin(request.email, request.password, config);
 
         if (token.Token == null)
         {
-            return new AuthResponse { Success = false, Message = token.Message };
+            return new AuthResponseDto { Success = false, Message = token.Message };
         }
 
 
-        return new AuthResponse { Success = true, Token = token.Token };
+        return new AuthResponseDto { Success = true, Token = token.Token };
     }
 
 

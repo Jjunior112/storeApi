@@ -1,11 +1,12 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using storeApp.domain.dtos;
 
 public class UserService
 {
-
     private readonly AppDbContext _context;
+
     public UserService(AppDbContext context)
     {
         _context = context;
@@ -15,40 +16,37 @@ public class UserService
 
     public async Task<User?> GetUserById(Guid id) => await _context.Users.FindAsync(id);
 
-    public async Task AddUser(User user)
+    public async Task AddUser(RegisterDto request)
 
     {
-        var hashedPassword = BCrypt.Net.BCrypt.HashPassword(user.Password);
-
-        user.Password = hashedPassword;
-
+        var hashedPassword = BCrypt.Net.BCrypt.HashPassword(request.password);
+        
+        var user = new User(request.username, request.email, hashedPassword);
+        
         _context.Users.Add(user);
 
         await _context.SaveChangesAsync();
-
     }
 
-    public async Task<AuthResponse> UserLogin(string email, string password, IConfiguration config)
+    public async Task<AuthResponseDto> UserLogin(string email, string password, IConfiguration config)
     {
         var user = await _context.Users.FirstOrDefaultAsync(u => u.UserEmail == email);
 
         if (user == null)
         {
-            return new AuthResponse { Success = false, Message = "Usuário inválido" };
+            return new AuthResponseDto { Success = false, Message = "Usuário inválido" };
         }
 
         bool isPasswordValid = BCrypt.Net.BCrypt.Verify(password, user.Password);
 
         if (!isPasswordValid)
         {
-            return new AuthResponse { Success = false, Message = "Senha inválida" };
-
+            return new AuthResponseDto { Success = false, Message = "Senha inválida" };
         }
 
         var token = JwtHelper.GenerateToken(user, config);
 
-        return new AuthResponse { Success = true, Token = token };
-
+        return new AuthResponseDto { Success = true, Token = token };
     }
 
     public async Task<UserDto?> UpdateUserName(Guid id, string email)
@@ -62,7 +60,6 @@ public class UserService
         await _context.SaveChangesAsync();
 
         return new UserDto(user.UserName, user.UserEmail);
-
     }
 
     public async Task<bool> DeleteUser(Guid id)
@@ -76,7 +73,5 @@ public class UserService
         await _context.SaveChangesAsync();
 
         return true;
-
     }
-
 }

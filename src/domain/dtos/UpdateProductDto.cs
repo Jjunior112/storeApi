@@ -1,0 +1,1 @@
+public record UpdateProductDto(int value);
