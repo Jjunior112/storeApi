@@ -7,13 +7,11 @@ using Microsoft.Extensions.Logging.Abstractions;
 [ApiController]
 public class ProductController : ControllerBase
 {
-
     private readonly ProductService _productService;
 
     public ProductController(ProductService productService)
     {
         _productService = productService;
-
     }
 
     [HttpGet]
@@ -27,7 +25,6 @@ public class ProductController : ControllerBase
         var product = await _productService.GetProductById(id);
 
         return product == null ? NotFound() : Ok(product);
-
     }
 
     [HttpPost]
@@ -37,7 +34,6 @@ public class ProductController : ControllerBase
         await _productService.CreateProduct(product);
 
         return CreatedAtAction(nameof(GetProductById), new { id = product.ProductId }, product);
-
     }
 
     [HttpPut("Edit/{id}")]
@@ -50,13 +46,11 @@ public class ProductController : ControllerBase
             return NotFound("Produto não encontrado.");
 
         return Ok(product);
-
     }
 
     [HttpPut("Increase/{id}")]
     [Authorize]
-
-    public async Task<IActionResult> IncreaseProduct(Guid id, [FromBody] UpdateProductRequest request)
+    public async Task<IActionResult> IncreaseProduct(Guid id, [FromBody] UpdateProductDto request)
     {
         var product = await _productService.IncreaseProduct(id, request.value);
 
@@ -68,7 +62,6 @@ public class ProductController : ControllerBase
 
     [HttpPut("Decrease/{id}")]
     [Authorize]
-
     public async Task<IActionResult> DecreaseProduct(Guid id, [FromBody] UpdateProductRequest request)
     {
         var product = await _productService.GetProductById(id);
